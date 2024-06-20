@@ -21,6 +21,29 @@
     </style>
 </head>
 <body>
-    <img src="wasp-12292_256.gif" alt="GIF en Plein Écran">
+    <img src="wasp-12292_256.gif" alt="GIF en Plein Écran" id="gif">
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const gif = document.getElementById('gif');
+
+            function openFullscreen() {
+                if (gif.requestFullscreen) {
+                    gif.requestFullscreen();
+                } else if (gif.mozRequestFullScreen) { // Firefox
+                    gif.mozRequestFullScreen();
+                } else if (gif.webkitRequestFullscreen) { // Chrome, Safari and Opera
+                    gif.webkitRequestFullscreen();
+                } else if (gif.msRequestFullscreen) { // IE/Edge
+                    gif.msRequestFullscreen();
+                }
+            }
+
+            // Automatically open fullscreen on page load
+            openFullscreen();
+
+            // Optional: Add event listener to go fullscreen on click
+            gif.addEventListener('click', openFullscreen);
+        });
+    </script>
 </body>
 </html>
