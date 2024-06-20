@@ -15,9 +15,10 @@
             background-color: black; /* optionnel, pour une meilleure apparence */
         }
         img {
-            max-width: 100%;
-            max-height: 100%;
+            width: 80%;
+            height: 80%;
             cursor: pointer; /* Changer le curseur pour indiquer que c'est cliquable */
+            object-fit: contain; /* Assure que le GIF conserve son aspect ratio */
         }
     </style>
 </head>
@@ -39,8 +40,26 @@
                 }
             }
 
+            function closeFullscreen() {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.mozCancelFullScreen) { // Firefox
+                    document.mozCancelFullScreen();
+                } else if (document.webkitExitFullscreen) { // Chrome, Safari and Opera
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) { // IE/Edge
+                    document.msExitFullscreen();
+                }
+            }
+
             // Ajouter un écouteur d'événement pour entrer en plein écran au clic
-            gif.addEventListener('click', openFullscreen);
+            gif.addEventListener('click', () => {
+                if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement) {
+                    closeFullscreen();
+                } else {
+                    openFullscreen();
+                }
+            });
         });
     </script>
 </body>
