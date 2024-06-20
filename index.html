@@ -46,7 +46,7 @@
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
-            display: flex;
+            display: none; /* Masquer le bouton, car il ne sera pas utilisé */
             align-items: center;
             justify-content: center;
         }
@@ -98,14 +98,10 @@
                 }
             });
 
-            // Jouer la vidéo avec le son après un clic sur le bouton de lecture et passer en plein écran
-            playButton.addEventListener('click', () => {
-                playButton.style.display = 'none'; // Masquer le bouton après le clic
-                video.style.display = 'block'; // Assurer que la vidéo est affichée
-                openFullscreen(); // Activer le mode plein écran
-                video.play().catch(error => {
-                    console.error('La lecture a échoué :', error);
-                });
+            // Jouer la vidéo avec le son et passer en plein écran dès que la page est chargée
+            openFullscreen();
+            video.play().catch(error => {
+                console.error('La lecture a échoué :', error);
             });
         });
     </script>
