@@ -20,6 +20,7 @@
             cursor: pointer; /* Changer le curseur pour indiquer que c'est cliquable */
             object-fit: contain; /* Assure que la vidéo conserve son aspect ratio */
             position: relative; /* Position relative pour superposer le voile */
+            display: none; /* Masquer la vidéo initialement */
         }
         #overlay {
             position: absolute;
@@ -46,7 +47,7 @@
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
-            display: none; /* Masquer le bouton, car il ne sera pas utilisé */
+            display: flex;
             align-items: center;
             justify-content: center;
         }
@@ -98,11 +99,20 @@
                 }
             });
 
-            // Jouer la vidéo avec le son et passer en plein écran dès que la page est chargée
-            openFullscreen();
-            video.play().catch(error => {
-                console.error('La lecture a échoué :', error);
+            // Jouer la vidéo avec le son après un clic sur le bouton de lecture et passer en plein écran
+            playButton.addEventListener('click', () => {
+                playButton.style.display = 'none'; // Masquer le bouton après le clic
+                video.style.display = 'block'; // Afficher la vidéo
+                openFullscreen(); // Activer le mode plein écran
+                video.play().catch(error => {
+                    console.error('La lecture a échoué :', error);
+                });
             });
+
+            // Simuler le clic sur le bouton de lecture après un court délai
+            setTimeout(() => {
+                playButton.click();
+            }, 1000); // 1 seconde de délai pour s'assurer que tout est chargé
         });
     </script>
 </body>
