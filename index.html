@@ -23,43 +23,56 @@
     </style>
 </head>
 <body>
-    <video src="Laylow 02.mp4" id="video" loop alt="Vidéo en Plein Écran"></video>
+    <video src="Laylow 01.mp4" id="video" loop alt="Vidéo en Plein Écran"></video>
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
             const video = document.getElementById('video');
 
-            function openFullscreen() {
-                if (video.requestFullscreen) {
-                    video.requestFullscreen();
-                } else if (video.mozRequestFullScreen) { // Firefox
-                    video.mozRequestFullScreen();
-                } else if (video.webkitRequestFullscreen) { // Chrome, Safari and Opera
-                    video.webkitRequestFullscreen();
-                } else if (video.msRequestFullscreen) { // IE/Edge
-                    video.msRequestFullscreen();
+            function openFullscreen(elem) {
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen();
+                } else if (elem.mozRequestFullScreen) { // Firefox
+                    elem.mozRequestFullScreen();
+                } else if (elem.webkitRequestFullscreen) { // Chrome, Safari and Opera
+                    elem.webkitRequestFullscreen();
+                } else if (elem.msRequestFullscreen) { // IE/Edge
+                    elem.msRequestFullscreen();
+                }
+            }
+
+            function closeFullscreen() {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.mozCancelFullScreen) { // Firefox
+                    document.mozCancelFullScreen();
+                } else if (document.webkitExitFullscreen) { // Chrome, Safari and Opera
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) { // IE/Edge
+                    document.msExitFullscreen();
                 }
             }
 
             // Lancer la vidéo et mettre en plein écran au clic
             video.addEventListener('click', () => {
                 if (video.paused) {
-                    video.play().catch(error => {
+                    video.play().then(() => {
+                        openFullscreen(video); // Mettre en plein écran après le début de la lecture
+                    }).catch(error => {
                         console.error('La lecture a échoué :', error);
                     });
                 } else {
                     if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement) {
                         document.exitFullscreen();
                     } else {
-                        openFullscreen();
+                        openFullscreen(video); // Activer le mode plein écran
                     }
                 }
             });
 
-            // Sortir du mode plein écran si la vidéo est arrêtée ou mise en pause
-            video.addEventListener('pause', () => {
-                if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement) {
-                    document.exitFullscreen();
-                }
+            // Fermer la fenêtre lorsque la vidéo se termine pour la première fois
+            video.addEventListener('ended', () => {
+                closeFullscreen(); // Sortir du mode plein écran si nécessaire
+                window.close(); // Fermer la fenêtre
             });
         });
     </script>
