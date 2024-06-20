@@ -15,55 +15,18 @@
             background-color: black; /* optionnel, pour une meilleure apparence */
         }
         video {
-            width: 80%;
-            height: 80%;
-            cursor: pointer; /* Changer le curseur pour indiquer que c'est cliquable */
+            width: 100vw;
+            height: 100vh;
             object-fit: contain; /* Assure que la vidéo conserve son aspect ratio */
-            position: relative; /* Position relative pour superposer le voile */
-        }
-        #overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('cloud-overlay.png') no-repeat center center / cover; /* Assurez-vous d'avoir une image de nuage */
-            animation: fadeout 5s forwards; /* Animation pour faire disparaître le voile en 5 secondes */
-        }
-        @keyframes fadeout {
-            0% { opacity: 1; }
-            100% { opacity: 0; }
-        }
-        #playButton {
-            background-color: rgba(255, 255, 255, 0.7);
-            border: none;
-            border-radius: 50%;
-            padding: 20px;
-            font-size: 24px;
-            cursor: pointer;
-            z-index: 10; /* Mettre le bouton au-dessus de la vidéo */
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        #playButton::before {
-            content: '▶';
+            cursor: pointer; /* Changer le curseur pour indiquer que c'est cliquable */
         }
     </style>
 </head>
 <body>
-    <div id="overlay"></div>
-    <button id="playButton"></button>
-    <video src="Laylow 01.mp4" id="video" loop alt="Vidéo en Plein Écran" controls></video>
+    <video src="Laylow 01.mp4" id="video" loop alt="Vidéo en Plein Écran"></video>
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
             const video = document.getElementById('video');
-            const overlay = document.getElementById('overlay');
-            const playButton = document.getElementById('playButton');
 
             function openFullscreen() {
                 if (video.requestFullscreen) {
@@ -77,39 +40,25 @@
                 }
             }
 
-            function closeFullscreen() {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                } else if (document.mozCancelFullScreen) { // Firefox
-                    document.mozCancelFullScreen();
-                } else if (document.webkitExitFullscreen) { // Chrome, Safari and Opera
-                    document.webkitExitFullscreen();
-                } else if (document.msExitFullscreen) { // IE/Edge
-                    document.msExitFullscreen();
-                }
-            }
-
-            // Jouer la vidéo avec le son après un clic sur le bouton de lecture et passer en plein écran
-            playButton.addEventListener('click', () => {
-                playButton.style.display = 'none'; // Masquer le bouton après le clic
-                video.style.display = 'block'; // Assurer que la vidéo est affichée
-                openFullscreen(); // Activer le mode plein écran
-                video.play().catch(error => {
-                    console.error('La lecture a échoué :', error);
-                });
-            });
-
-            // Cacher les contrôles de la vidéo une fois qu'elle a commencé à jouer
-            video.addEventListener('play', () => {
-                video.removeAttribute('controls'); // Retirer les contrôles de la vidéo
-            });
-
-            // Ajouter un écouteur d'événement pour entrer en plein écran au clic sur la vidéo
+            // Lancer la vidéo et mettre en plein écran au clic
             video.addEventListener('click', () => {
-                if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement) {
-                    closeFullscreen();
+                if (video.paused) {
+                    video.play().catch(error => {
+                        console.error('La lecture a échoué :', error);
+                    });
                 } else {
-                    openFullscreen();
+                    if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement) {
+                        document.exitFullscreen();
+                    } else {
+                        openFullscreen();
+                    }
+                }
+            });
+
+            // Sortir du mode plein écran si la vidéo est arrêtée ou mise en pause
+            video.addEventListener('pause', () => {
+                if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement) {
+                    document.exitFullscreen();
                 }
             });
         });
