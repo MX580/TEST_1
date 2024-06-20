@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Vidéo en Plein Écran</title>
+    <title>GIF en Plein Écran avec Musique</title>
     <style>
         body, html {
             margin: 0;
@@ -14,11 +14,11 @@
             align-items: center;
             background-color: black; /* optionnel, pour une meilleure apparence */
         }
-        video {
+        img {
             width: 80%;
             height: 80%;
             cursor: pointer; /* Changer le curseur pour indiquer que c'est cliquable */
-            object-fit: contain; /* Assure que la vidéo conserve son aspect ratio */
+            object-fit: contain; /* Assure que le GIF conserve son aspect ratio */
             position: relative; /* Position relative pour superposer le voile */
         }
         #overlay {
@@ -27,7 +27,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: url('cloud-ovssssdderlay.png') no-repeat center center / cover; /* Assurez-vous d'avoir une image de nuage */
+            background: url('cloud-overlay.png') no-repeat center center / cover; /* Assurez-vous d'avoir une image de nuage */
             animation: fadeout 5s forwards; /* Animation pour faire disparaître le voile en 5 secondes */
         }
         @keyframes fadeout {
@@ -38,21 +38,22 @@
 </head>
 <body>
     <div id="overlay"></div>
-    <video src="Laylow 01.mp4" id="video" loop alt="Vidéo en Plein Écran"></video>
+    <img src="Laylow-01.gif" alt="GIF en Plein Écran" id="gif">
+    <audio id="audio" src="Musique.mp3" autoplay loop></audio>
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
-            const video = document.getElementById('video');
-            const overlay = document.getElementById('overlay');
+            const gif = document.getElementById('gif');
+            const audio = document.getElementById('audio');
 
             function openFullscreen() {
-                if (video.requestFullscreen) {
-                    video.requestFullscreen();
-                } else if (video.mozRequestFullScreen) { // Firefox
-                    video.mozRequestFullScreen();
-                } else if (video.webkitRequestFullscreen) { // Chrome, Safari and Opera
-                    video.webkitRequestFullscreen();
-                } else if (video.msRequestFullscreen) { // IE/Edge
-                    video.msRequestFullscreen();
+                if (gif.requestFullscreen) {
+                    gif.requestFullscreen();
+                } else if (gif.mozRequestFullScreen) { // Firefox
+                    gif.mozRequestFullScreen();
+                } else if (gif.webkitRequestFullscreen) { // Chrome, Safari and Opera
+                    gif.webkitRequestFullscreen();
+                } else if (gif.msRequestFullscreen) { // IE/Edge
+                    gif.msRequestFullscreen();
                 }
             }
 
@@ -69,7 +70,7 @@
             }
 
             // Ajouter un écouteur d'événement pour entrer en plein écran au clic
-            video.addEventListener('click', () => {
+            gif.addEventListener('click', () => {
                 if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement) {
                     closeFullscreen();
                 } else {
@@ -77,9 +78,9 @@
                 }
             });
 
-            // Jouer la vidéo avec le son dès que la page est chargée
-            video.play().catch(error => {
-                console.error('La lecture automatique avec le son a été bloquée:', error);
+            // Jouer la musique dès que la page est chargée
+            audio.play().catch(error => {
+                console.error('La lecture automatique a été bloquée:', error);
             });
         });
     </script>
