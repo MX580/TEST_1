@@ -58,7 +58,7 @@
 <body>
     <div id="overlay"></div>
     <button id="playButton"></button>
-    <video src="Laylow 01.mp4" id="video" loop alt="Vidéo en Plein Écran"></video>
+    <video src="Laylow 01.mp4" id="video" loop alt="Vidéo en Plein Écran" controls></video>
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
             const video = document.getElementById('video');
@@ -89,15 +89,6 @@
                 }
             }
 
-            // Ajouter un écouteur d'événement pour entrer en plein écran au clic
-            video.addEventListener('click', () => {
-                if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement) {
-                    closeFullscreen();
-                } else {
-                    openFullscreen();
-                }
-            });
-
             // Jouer la vidéo avec le son après un clic sur le bouton de lecture et passer en plein écran
             playButton.addEventListener('click', () => {
                 playButton.style.display = 'none'; // Masquer le bouton après le clic
@@ -106,6 +97,20 @@
                 video.play().catch(error => {
                     console.error('La lecture a échoué :', error);
                 });
+            });
+
+            // Cacher les contrôles de la vidéo une fois qu'elle a commencé à jouer
+            video.addEventListener('play', () => {
+                video.removeAttribute('controls'); // Retirer les contrôles de la vidéo
+            });
+
+            // Ajouter un écouteur d'événement pour entrer en plein écran au clic sur la vidéo
+            video.addEventListener('click', () => {
+                if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement) {
+                    closeFullscreen();
+                } else {
+                    openFullscreen();
+                }
             });
         });
     </script>
