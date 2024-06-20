@@ -19,14 +19,30 @@
             height: 80%;
             cursor: pointer; /* Changer le curseur pour indiquer que c'est cliquable */
             object-fit: contain; /* Assure que le GIF conserve son aspect ratio */
+            position: relative; /* Position relative pour superposer le voile */
+        }
+        #overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('cloud-overlay.png') no-repeat center center / cover; /* Assurez-vous d'avoir une image de nuage */
+            animation: fadeout 5s forwards; /* Animation pour faire disparaître le voile en 5 secondes */
+        }
+        @keyframes fadeout {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
         }
     </style>
 </head>
 <body>
+    <div id="overlay"></div>
     <img src="wasp-12292_256.gif" alt="GIF en Plein Écran" id="gif">
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
             const gif = document.getElementById('gif');
+            const overlay = document.getElementById('overlay');
 
             function openFullscreen() {
                 if (gif.requestFullscreen) {
