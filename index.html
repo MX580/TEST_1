@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>GIF en Plein Écran</title>
+    <title>Vidéo en Plein Écran</title>
     <style>
         body, html {
             margin: 0;
@@ -14,11 +14,11 @@
             align-items: center;
             background-color: black; /* optionnel, pour une meilleure apparence */
         }
-        img {
+        video {
             width: 80%;
             height: 80%;
             cursor: pointer; /* Changer le curseur pour indiquer que c'est cliquable */
-            object-fit: contain; /* Assure que le GIF conserve son aspect ratio */
+            object-fit: contain; /* Assure que la vidéo conserve son aspect ratio */
             position: relative; /* Position relative pour superposer le voile */
         }
         #overlay {
@@ -38,21 +38,21 @@
 </head>
 <body>
     <div id="overlay"></div>
-    <img src="wasp-12292_256.gif" alt="GIF en Plein Écran" id="gif">
+    <video src="Laylow 01.mp4" autoplay loop id="video" alt="Vidéo en Plein Écran"></video>
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
-            const gif = document.getElementById('gif');
+            const video = document.getElementById('video');
             const overlay = document.getElementById('overlay');
 
             function openFullscreen() {
-                if (gif.requestFullscreen) {
-                    gif.requestFullscreen();
-                } else if (gif.mozRequestFullScreen) { // Firefox
-                    gif.mozRequestFullScreen();
-                } else if (gif.webkitRequestFullscreen) { // Chrome, Safari and Opera
-                    gif.webkitRequestFullscreen();
-                } else if (gif.msRequestFullscreen) { // IE/Edge
-                    gif.msRequestFullscreen();
+                if (video.requestFullscreen) {
+                    video.requestFullscreen();
+                } else if (video.mozRequestFullScreen) { // Firefox
+                    video.mozRequestFullScreen();
+                } else if (video.webkitRequestFullscreen) { // Chrome, Safari and Opera
+                    video.webkitRequestFullscreen();
+                } else if (video.msRequestFullscreen) { // IE/Edge
+                    video.msRequestFullscreen();
                 }
             }
 
@@ -69,7 +69,7 @@
             }
 
             // Ajouter un écouteur d'événement pour entrer en plein écran au clic
-            gif.addEventListener('click', () => {
+            video.addEventListener('click', () => {
                 if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement) {
                     closeFullscreen();
                 } else {
