@@ -20,7 +20,6 @@
             cursor: pointer; /* Changer le curseur pour indiquer que c'est cliquable */
             object-fit: contain; /* Assure que la vidéo conserve son aspect ratio */
             position: relative; /* Position relative pour superposer le voile */
-            display: none; /* Masquer la vidéo initialement */
         }
         #overlay {
             position: absolute;
@@ -59,7 +58,7 @@
 <body>
     <div id="overlay"></div>
     <button id="playButton"></button>
-    <video src="Laylow 02.mp4" id="video" loop alt="Vidéo en Plein Écran"></video>
+    <video src="Laylow 01.mp4" id="video" loop alt="Vidéo en Plein Écran"></video>
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
             const video = document.getElementById('video');
@@ -102,17 +101,12 @@
             // Jouer la vidéo avec le son après un clic sur le bouton de lecture et passer en plein écran
             playButton.addEventListener('click', () => {
                 playButton.style.display = 'none'; // Masquer le bouton après le clic
-                video.style.display = 'block'; // Afficher la vidéo
+                video.style.display = 'block'; // Assurer que la vidéo est affichée
                 openFullscreen(); // Activer le mode plein écran
                 video.play().catch(error => {
                     console.error('La lecture a échoué :', error);
                 });
             });
-
-            // Simuler le clic sur le bouton de lecture après un court délai
-            setTimeout(() => {
-                playButton.click();
-            }, 1000); // 1 seconde de délai pour s'assurer que tout est chargé
         });
     </script>
 </body>
