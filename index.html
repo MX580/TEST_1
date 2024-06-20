@@ -20,6 +20,7 @@
             cursor: pointer; /* Changer le curseur pour indiquer que c'est cliquable */
             object-fit: contain; /* Assure que la vidéo conserve son aspect ratio */
             position: relative; /* Position relative pour superposer le voile */
+            display: none; /* Masquer la vidéo initialement */
         }
         #overlay {
             position: absolute;
@@ -34,15 +35,25 @@
             0% { opacity: 1; }
             100% { opacity: 0; }
         }
+        #playButton {
+            background-color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 10; /* Mettre le bouton au-dessus du voile */
+        }
     </style>
 </head>
 <body>
     <div id="overlay"></div>
+    <button id="playButton">Play Video</button>
     <video src="Laylow 01.mp4" id="video" loop alt="Vidéo en Plein Écran"></video>
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
             const video = document.getElementById('video');
             const overlay = document.getElementById('overlay');
+            const playButton = document.getElementById('playButton');
 
             function openFullscreen() {
                 if (video.requestFullscreen) {
@@ -77,9 +88,13 @@
                 }
             });
 
-            // Jouer la vidéo avec le son dès que la page est chargée
-            video.play().catch(error => {
-                console.error('La lecture automatique avec le son a été bloquée:', error);
+            // Jouer la vidéo avec le son après un clic sur le bouton de lecture
+            playButton.addEventListener('click', () => {
+                playButton.style.display = 'none'; // Masquer le bouton après le clic
+                video.style.display = 'block'; // Afficher la vidéo
+                video.play().catch(error => {
+                    console.error('La lecture a échoué :', error);
+                });
             });
         });
     </script>
