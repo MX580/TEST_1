@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Vidéo en Plein Écran</title>
+    <title>Animation BUB</title>
     <style>
         body, html {
             margin: 0;
@@ -12,37 +12,111 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: black; /* optionnel, pour une meilleure apparence */
+            background-color: black;
         }
-        #open-video-link {
+        .hidden {
+            display: none;
+        }
+        #intro {
+            position: absolute;
+            width: 100%;
+            height: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 80%;
-            height: 80%;
-            background-color: #fff;
-            color: #000;
-            text-decoration: none;
-            font-size: 24px;
-            border: 2px solid #000;
-            padding: 20px;
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fad0c4);
+            animation: backgroundFade 10s infinite;
+            flex-direction: column;
+        }
+        @keyframes backgroundFade {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        #logo {
+            width: 200px;
+            height: 200px;
+            background: url('logo.png') no-repeat center center / contain;
+            animation: rotate 5s infinite linear;
+        }
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        #startButton {
+            margin-top: 20px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            color: white;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        #startButton:hover {
+            background: rgba(255, 255, 255, 0.8);
+        }
+        video {
+            width: 100vw;
+            height: 100vh;
+            object-fit: contain;
             cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <a id="open-video-link" href="Laylow 02.mp4" download="Laylow 02.mp4">Cliquez pour ouvrir la vidéo</a>
+    <div id="intro">
+        <div id="logo"></div>
+        <button id="startButton">Découvrir mon animation BUB</button>
+    </div>
+    <video src="Laylow 01.mp4" id="video" class="hidden" loop></video>
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
-            const link = document.getElementById('open-video-link');
-            
-            link.addEventListener('click', (event) => {
-                event.preventDefault();
-                window.location.href = link.href;
+            const startButton = document.getElementById('startButton');
+            const intro = document.getElementById('intro');
+            const video = document.getElementById('video');
+
+            function openFullscreen(elem) {
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen();
+                } else if (elem.mozRequestFullScreen) { // Firefox
+                    elem.mozRequestFullScreen();
+                } else if (elem.webkitRequestFullscreen) { // Chrome, Safari and Opera
+                    elem.webkitRequestFullscreen();
+                } else if (elem.msRequestFullscreen) { // IE/Edge
+                    elem.msRequestFullscreen();
+                }
+            }
+
+            function closeFullscreen() {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.mozCancelFullScreen) { // Firefox
+                    document.mozCancelFullScreen();
+                } else if (document.webkitExitFullscreen) { // Chrome, Safari and Opera
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) { // IE/Edge
+                    document.msExitFullscreen();
+                }
+            }
+
+            // Quand le bouton est cliqué, cacher l'intro et lancer la vidéo en plein écran
+            startButton.addEventListener('click', () => {
+                intro.style.display = 'none';
+                video.classList.remove('hidden');
+                video.play().then(() => {
+                    openFullscreen(video); // Mettre en plein écran après le début de la lecture
+                }).catch(error => {
+                    console.error('La lecture a échoué :', error);
+                });
             });
 
-            // Lancer automatiquement le téléchargement / ouverture de la vidéo
-            window.location.href = link.href;
+            // Fermer la fenêtre lorsque la vidéo se termine pour la première fois
+            video.addEventListener('ended', () => {
+                closeFullscreen(); // Sortir du mode plein écran si nécessaire
+                window.close(); // Fermer la fenêtre
+            });
         });
     </script>
 </body>
