@@ -14,66 +14,35 @@
             align-items: center;
             background-color: black; /* optionnel, pour une meilleure apparence */
         }
-        video {
-            width: 100vw;
-            height: 100vh;
-            object-fit: contain; /* Assure que la vidéo conserve son aspect ratio */
-            cursor: pointer; /* Changer le curseur pour indiquer que c'est cliquable */
+        #open-video-link {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 80%;
+            height: 80%;
+            background-color: #fff;
+            color: #000;
+            text-decoration: none;
+            font-size: 24px;
+            border: 2px solid #000;
+            padding: 20px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <video src="Laylow 02.mp4" id="video" loop alt="Vidéo en Plein Écran"></video>
+    <a id="open-video-link" href="Laylow 02.mp4" download="Laylow 02.mp4">Cliquez pour ouvrir la vidéo</a>
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
-            const video = document.getElementById('video');
-
-            function openFullscreen(elem) {
-                if (elem.requestFullscreen) {
-                    elem.requestFullscreen();
-                } else if (elem.mozRequestFullScreen) { // Firefox
-                    elem.mozRequestFullScreen();
-                } else if (elem.webkitRequestFullscreen) { // Chrome, Safari and Opera
-                    elem.webkitRequestFullscreen();
-                } else if (elem.msRequestFullscreen) { // IE/Edge
-                    elem.msRequestFullscreen();
-                }
-            }
-
-            function closeFullscreen() {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                } else if (document.mozCancelFullScreen) { // Firefox
-                    document.mozCancelFullScreen();
-                } else if (document.webkitExitFullscreen) { // Chrome, Safari and Opera
-                    document.webkitExitFullscreen();
-                } else if (document.msExitFullscreen) { // IE/Edge
-                    document.msExitFullscreen();
-                }
-            }
-
-            // Lancer la vidéo et mettre en plein écran au clic
-            video.addEventListener('click', () => {
-                if (video.paused) {
-                    video.play().then(() => {
-                        openFullscreen(video); // Mettre en plein écran après le début de la lecture
-                    }).catch(error => {
-                        console.error('La lecture a échoué :', error);
-                    });
-                } else {
-                    if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement) {
-                        document.exitFullscreen();
-                    } else {
-                        openFullscreen(video); // Activer le mode plein écran
-                    }
-                }
+            const link = document.getElementById('open-video-link');
+            
+            link.addEventListener('click', (event) => {
+                event.preventDefault();
+                window.location.href = link.href;
             });
 
-            // Fermer la fenêtre lorsque la vidéo se termine pour la première fois
-            video.addEventListener('ended', () => {
-                closeFullscreen(); // Sortir du mode plein écran si nécessaire
-                window.close(); // Fermer la fenêtre
-            });
+            // Lancer automatiquement le téléchargement / ouverture de la vidéo
+            window.location.href = link.href;
         });
     </script>
 </body>
