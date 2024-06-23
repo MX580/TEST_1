@@ -26,6 +26,7 @@
             justify-content: center;
             align-items: center;
             flex-direction: column;
+            text-align: center;
         }
         @keyframes backgroundFade {
             0% { background-position: 0% 50%; }
@@ -33,51 +34,23 @@
             100% { background-position: 0% 50%; }
         }
         #Logo_bub {
-            width: 200px;
-            height: 200px;
-            background: url('Logo_bub.png') no-repeat center center / contain;
-            animation: packOpening 30s infinite;
-        }
-        @keyframes packOpening {
-            0%, 100% { transform: rotateY(0deg); }
-            50% { transform: rotateY(720deg); }
+            width: 300px;
+            height: 300px;
+            background: url('logo.png') no-repeat center center / contain;
+            margin-bottom: 20px;
         }
         #startButton {
-            margin-top: 20px;
-            padding: 10px 40px;
+            padding: 20px 40px;
             border: none;
             border-radius: 25px; /* Rond allongé */
             background: rgba(255, 255, 255, 0.5);
             color: black;
-            font-size: 1.2em;
+            font-size: 1.5em;
             cursor: pointer;
             transition: background 0.3s;
         }
         #startButton:hover {
             background: rgba(255, 255, 255, 0.8);
-        }
-        .swipe-bar {
-            margin-top: 20px;
-            width: 80%;
-            height: 20px;
-            background: rgba(255, 255, 255, 0.5);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            overflow: hidden;
-        }
-        .swipe-ball {
-            width: 20px;
-            height: 20px;
-            background: white;
-            border-radius: 50%;
-            animation: swipe 2s infinite;
-        }
-        @keyframes swipe {
-            0% { transform: translateX(0); }
-            50% { transform: translateX(100%); }
-            100% { transform: translateX(0); }
         }
         video {
             width: 100vw;
@@ -91,9 +64,6 @@
     <div id="intro">
         <div id="Logo_bub"></div>
         <button id="startButton">Swipe pour découvrir ton animation exclusive BUB</button>
-        <div class="swipe-bar">
-            <div class="swipe-ball"></div>
-        </div>
     </div>
     <video src="Laylow 03.mp4" id="video" class="hidden" loop></video>
     <script>
@@ -101,8 +71,12 @@
             const startButton = document.getElementById('startButton');
             const intro = document.getElementById('intro');
             const video = document.getElementById('video');
+            const logo = document.getElementById('Logo_bub');
             let touchstartX = 0;
             let touchendX = 0;
+            let touchstartTime = 0;
+            let touchendTime = 0;
+            let rotation = 0;
 
             function openFullscreen(elem) {
                 if (elem.requestFullscreen) {
@@ -128,19 +102,6 @@
                 }
             }
 
-            function handleGesture() {
-                if (touchendX < touchstartX) {
-                    // Swipe gauche-droite détecté
-                    intro.style.display = 'none';
-                    video.classList.remove('hidden');
-                    video.play().then(() => {
-                        openFullscreen(video); // Mettre en plein écran après le début de la lecture
-                    }).catch(error => {
-                        console.error('La lecture a échoué :', error);
-                    });
-                }
-            }
-
             startButton.addEventListener('click', () => {
                 intro.style.display = 'none';
                 video.classList.remove('hidden');
@@ -153,12 +114,30 @@
 
             document.addEventListener('touchstart', (e) => {
                 touchstartX = e.changedTouches[0].screenX;
+                touchstartTime = new Date().getTime();
             });
 
             document.addEventListener('touchend', (e) => {
                 touchendX = e.changedTouches[0].screenX;
+                touchendTime = new Date().getTime();
                 handleGesture();
             });
+
+            function handleGesture() {
+                const distance = touchendX - touchstartX;
+                const time = touchendTime - touchstartTime;
+                if (distance !== 0) {
+                    const speed = Math.abs(distance / time);
+                    rotateLogo(speed);
+                }
+            }
+
+            function rotateLogo(speed) {
+                const duration = 1 / speed * 1000; // Convert speed to duration
+                rotation += 360; // Rotate by 360 degrees
+                logo.style.transition = `transform ${duration}ms linear`;
+                logo.style.transform = `rotate(${rotation}deg)`;
+            }
 
             // Fermer la fenêtre lorsque la vidéo se termine pour la première fois
             video.addEventListener('ended', () => {
