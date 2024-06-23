@@ -12,9 +12,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #cde9ef; /* Couleur de fond en hexadécimal */
-            /* background-color: hsl(191, 100%, 88%); */ /* Couleur de fond en HSL */
-            /* background-color: rgba(205, 233, 239, 1); */ /* Couleur de fond en RGBA */
+            background-color: #cde9ef; /* Couleur de fond */
         }
         .hidden {
             display: none;
@@ -42,10 +40,10 @@
         }
         @keyframes rotate {
             from {
-                transform: rotate(0deg); /* Rotation initiale */
+                transform: rotateZ(0deg); /* Rotation initiale sur l'axe Z */
             }
             to {
-                transform: rotate(360deg); /* Rotation complète */
+                transform: rotateZ(360deg); /* Rotation complète sur l'axe Z */
             }
         }
         video {
@@ -60,14 +58,13 @@
     <div id="intro">
         <div id="Logo_bub"></div>
     </div>
-    <video src="Laylow 03.mp4" id="video" class="hidden" loop muted></video>
+    <video src="Laylow 03.mp4" id="video" class="hidden" loop></video>
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
             const intro = document.getElementById('intro');
             const logo = document.getElementById('Logo_bub');
             const video = document.getElementById('video');
-            let volumeInterval;
-            const initialVolume = 0.1; // Volume de départ (10%)
+            const initialVolume = 0.3; // Volume de départ (30%)
 
             function openFullscreen(elem) {
                 if (elem.requestFullscreen) {
@@ -88,9 +85,9 @@
                     intro.style.display = 'none';
                     video.classList.remove('hidden');
                     openFullscreen(video); // Mettre en plein écran
+                    video.volume = initialVolume; // Définir le volume initial
                     video.play().then(() => {
-                        // Augmenter le volume de manière progressive
-                        video.volume = initialVolume;
+                        // Démarrer la vidéo avec volume initial
                     }).catch(error => {
                         console.error('La lecture a échoué :', error);
                     });
