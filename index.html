@@ -39,10 +39,10 @@
         }
         @keyframes rotate {
             from {
-                transform: rotateX(0deg) rotateY(0deg); /* Rotation initiale */
+                transform: rotate(0deg); /* Rotation initiale */
             }
             to {
-                transform: rotateX(360deg) rotateY(360deg); /* Rotation complète */
+                transform: rotate(360deg); /* Rotation complète */
             }
         }
         video {
@@ -63,6 +63,9 @@
             const intro = document.getElementById('intro');
             const logo = document.getElementById('Logo_bub');
             const video = document.getElementById('video');
+            let volumeInterval;
+            const initialVolume = 0.1; // Volume de départ (0.1 = 10%)
+            const targetVolume = 1.0; // Volume cible (1.0 = 100%)
 
             function openFullscreen(elem) {
                 if (elem.requestFullscreen) {
@@ -83,7 +86,23 @@
                     intro.style.display = 'none';
                     video.classList.remove('hidden');
                     openFullscreen(video); // Mettre en plein écran
-                    video.play().catch(error => {
+                    video.play().then(() => {
+                        // Augmenter le volume de manière progressive
+                        let currentVolume = initialVolume;
+                        const volumeIncrement = (targetVolume - initialVolume) / 50; // 50 étapes sur 5 secondes
+
+                        volumeInterval = setInterval(() => {
+                            if (currentVolume < targetVolume) {
+                                currentVolume += volumeIncrement;
+                                if (currentVolume > targetVolume) {
+                                    currentVolume = targetVolume;
+                                }
+                                video.volume = currentVolume;
+                            } else {
+                                clearInterval(volumeInterval); // Arrêter l'intervalle une fois le volume cible atteint
+                            }
+                        }, 100); // Interval de 100 ms entre chaque augmentation de volume
+                    }).catch(error => {
                         console.error('La lecture a échoué :', error);
                     });
                 }, 2000); // Attendre 2 secondes avant de démarrer la vidéo
