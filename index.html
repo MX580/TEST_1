@@ -30,12 +30,12 @@
             transition: opacity 2s ease; /* Animation de fade-in/fade-out pour l'introduction */
         }
         #Logo_bub {
-            width: 400px;
-            height: 400px;
+            width: 600px;
+            height: 600px;
             background: url('Logo_bub.png') no-repeat center center / contain;
             margin-bottom: 20px;
             border-radius: 50%;
-            transition: transform 3s cubic-bezier(0.25, 0.1, 0.25, 1); /* Animation de rotation */
+            transition: transform 10s cubic-bezier(0.25, 0.1, 0.25, 1); /* Animation de rotation */
         }
         #startButton {
             padding: 20px 40px;
@@ -46,9 +46,7 @@
             font-size: 1.5em;
             cursor: pointer;
             transition: background 0.3s;
-        }
-        #startButton:hover {
-            background: rgba(255, 255, 255, 0.8);
+            display: none;
         }
         video {
             width: 100vw;
@@ -61,19 +59,15 @@
 <body>
     <div id="intro">
         <div id="Logo_bub"></div>
-        <button id="startButton">Swipe pour découvrir ton animation exclusive BUB</button>
     </div>
     <video src="Laylow 03.mp4" id="video" class="hidden" loop></video>
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
-            const startButton = document.getElementById('startButton');
             const intro = document.getElementById('intro');
-            const video = document.getElementById('video');
             const logo = document.getElementById('Logo_bub');
-            let touchstartX = 0;
-            let touchendX = 0;
-            let touchstartTime = 0;
-            let touchendTime = 0;
+            const video = document.getElementById('video');
+            let rotationSpeed = 0; // Vitesse initiale de rotation
+            let rotationInterval; // Interval pour augmenter la vitesse de rotation
 
             function openFullscreen(elem) {
                 if (elem.requestFullscreen) {
@@ -99,58 +93,46 @@
                 }
             }
 
-            function rotateLogo(speed) {
-                const maxRotation = 360 * speed * 10; // Calculer la rotation maximale en fonction de la vitesse
-                const rotationDuration = Math.min(3000, maxRotation); // Limiter la durée à 3 secondes max
-                logo.style.transition = `transform ${rotationDuration}ms cubic-bezier(0.25, 0.1, 0.25, 1)`;
-                logo.style.transform = `rotateY(${maxRotation}deg)`; // Rotation autour de l'axe Y
+            function rotateLogo() {
+                // Augmenter progressivement la vitesse de rotation
+                rotationSpeed = rotationSpeed * 3; // Tripler la vitesse
+                logo.style.transition = `transform 3s cubic-bezier(0.25, 0.1, 0.25, 1)`;
+                logo.style.transform = `rotate(${rotationSpeed}deg)`;
+            }
+
+            function startVideo() {
+                intro.style.opacity = '0'; // Faire disparaître l'introduction
                 setTimeout(() => {
-                    intro.style.opacity = '0'; // Faire disparaître l'introduction
-                    setTimeout(() => {
-                        intro.style.display = 'none';
-                        video.classList.remove('hidden');
-                        video.play().then(() => {
-                            openFullscreen(video); // Mettre en plein écran après le début de la lecture
-                        }).catch(error => {
-                            console.error('La lecture a échoué :', error);
-                        });
-                    }, 1000); // Attendre 1 seconde avant de masquer l'introduction
-                }, rotationDuration);
+                    intro.style.display = 'none';
+                    video.classList.remove('hidden');
+                    video.play().then(() => {
+                        openFullscreen(video); // Mettre en plein écran après le début de la lecture
+                    }).catch(error => {
+                        console.error('La lecture a échoué :', error);
+                    });
+                }, 1000); // Attendre 1 seconde avant de masquer l'introduction
             }
 
-            document.addEventListener('touchstart', (e) => {
-                touchstartX = e.changedTouches[0].screenX;
-                touchstartTime = new Date().getTime();
+            // Commencer la rotation initiale du logo
+            logo.addEventListener('click', () => {
+                logo.style.transition = `transform 10s cubic-bezier(0.25, 0.1, 0.25, 1)`; // Animation de rotation initiale
+                rotationSpeed = 10; // Vitesse initiale de rotation
+                rotateLogo();
+
+                // Déclencher l'augmentation de la vitesse de rotation
+                rotationInterval = setInterval(() => {
+                    rotateLogo();
+                }, 2000); // Augmenter la vitesse toutes les 2 secondes
+
+                // Démarrer la vidéo après 10 secondes (durée de l'animation de rotation initiale)
+                setTimeout(() => {
+                    startVideo();
+                }, 10000); // Attendre 10 secondes avant de démarrer la vidéo
             });
 
-            document.addEventListener('touchend', (e) => {
-                touchendX = e.changedTouches[0].screenX;
-                touchendTime = new Date().getTime();
-                handleGesture();
-            });
-
-            document.addEventListener('mousedown', (e) => {
-                touchstartX = e.screenX;
-                touchstartTime = new Date().getTime();
-            });
-
-            document.addEventListener('mouseup', (e) => {
-                touchendX = e.screenX;
-                touchendTime = new Date().getTime();
-                handleGesture();
-            });
-
-            function handleGesture() {
-                const distance = touchendX - touchstartX;
-                const time = touchendTime - touchstartTime;
-                if (distance !== 0) {
-                    const speed = Math.abs(distance / time);
-                    rotateLogo(speed);
-                }
-            }
-
-            // Fermer la fenêtre lorsque la vidéo se termine pour la première fois
+            // Arrêter l'augmentation de la vitesse de rotation si la vidéo se termine
             video.addEventListener('ended', () => {
+                clearInterval(rotationInterval);
                 closeFullscreen(); // Sortir du mode plein écran si nécessaire
                 window.close(); // Fermer la fenêtre
             });
