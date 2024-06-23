@@ -12,7 +12,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #e8d9c5; /* Couleur de fond similaire à celle de la vidéo */
+            background: linear-gradient(135deg, #007bff, #00bfff); /* Dégradé de bleu */
         }
         .hidden {
             display: none;
@@ -35,6 +35,15 @@
             margin-bottom: 20px;
             border-radius: 50%;
             cursor: pointer; /* Curseur pointeur pour indiquer que le logo est cliquable */
+            animation: rotate 3s linear infinite; /* Animation de rotation continue */
+        }
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
         }
         video {
             width: 100vw;
