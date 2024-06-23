@@ -24,7 +24,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fad0c4);
+            background: linear-gradient(45deg, #f0e68c, #beige, #f0e68c);
             animation: backgroundFade 10s infinite;
             flex-direction: column;
         }
@@ -33,23 +33,23 @@
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
-        #logo {
+        #Logo_bub {
             width: 200px;
             height: 200px;
-            background: url('Logo_bub.png') no-repeat center center / contain;
-            animation: rotate 5s infinite linear;
+            background: url('logo.png') no-repeat center center / contain;
+            animation: translate 5s infinite linear;
         }
-        @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        @keyframes translate {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(200px); }
         }
         #startButton {
             margin-top: 20px;
             padding: 10px 20px;
             border: none;
-            border-radius: 50%;
+            border-radius: 25px; /* Rond allongé */
             background: rgba(255, 255, 255, 0.5);
-            color: white;
+            color: black;
             font-size: 1.2em;
             cursor: pointer;
             transition: background 0.3s;
@@ -67,15 +67,16 @@
 </head>
 <body>
     <div id="intro">
-        <div id="Logo"></div>
-        <button id="startButton">Découvrir mon animation BUB</button>
+        <div id="Logo_bub"></div>
+        <button id="startButton">Swipe pour découvrir ton animation exclusive BUB</button>
     </div>
     <video src="Laylow 03.mp4" id="video" class="hidden" loop></video>
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
-            const startButton = document.getElementById('startButton');
             const intro = document.getElementById('intro');
             const video = document.getElementById('video');
+            let touchstartX = 0;
+            let touchendX = 0;
 
             function openFullscreen(elem) {
                 if (elem.requestFullscreen) {
@@ -101,15 +102,26 @@
                 }
             }
 
-            // Quand le bouton est cliqué, cacher l'intro et lancer la vidéo en plein écran
-            startButton.addEventListener('click', () => {
-                intro.style.display = 'none';
-                video.classList.remove('hidden');
-                video.play().then(() => {
-                    openFullscreen(video); // Mettre en plein écran après le début de la lecture
-                }).catch(error => {
-                    console.error('La lecture a échoué :', error);
-                });
+            function handleGesture() {
+                if (touchendX < touchstartX) {
+                    // Swipe gauche-droite détecté
+                    intro.style.display = 'none';
+                    video.classList.remove('hidden');
+                    video.play().then(() => {
+                        openFullscreen(video); // Mettre en plein écran après le début de la lecture
+                    }).catch(error => {
+                        console.error('La lecture a échoué :', error);
+                    });
+                }
+            }
+
+            document.addEventListener('touchstart', (e) => {
+                touchstartX = e.changedTouches[0].screenX;
+            });
+
+            document.addEventListener('touchend', (e) => {
+                touchendX = e.changedTouches[0].screenX;
+                handleGesture();
             });
 
             // Fermer la fenêtre lorsque la vidéo se termine pour la première fois
