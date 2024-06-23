@@ -12,7 +12,9 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #00FFFF; /* Cyan */
+            background-color: #cde9ef; /* Couleur de fond en hexadécimal */
+            /* background-color: hsl(191, 100%, 88%); */ /* Couleur de fond en HSL */
+            /* background-color: rgba(205, 233, 239, 1); */ /* Couleur de fond en RGBA */
         }
         .hidden {
             display: none;
@@ -35,7 +37,7 @@
             background: url('Logo_bub.png') no-repeat center center / contain;
             margin-bottom: 20px;
             cursor: pointer; /* Curseur pointeur pour indiquer que le logo est cliquable */
-            animation: rotate 10s linear infinite; /* Animation de rotation continue (plus lente) */
+            animation: rotate 10s linear infinite; /* Animation de rotation continue */
             transform-origin: center; /* Centre de rotation */
         }
         @keyframes rotate {
