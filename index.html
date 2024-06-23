@@ -35,16 +35,29 @@
         #Logo_bub {
             width: 200px;
             height: 200px;
-            background: url('logo.png') no-repeat center center / contain;
-            animation: translate 5s infinite linear;
+            background: url('Logo_bub.png') no-repeat center center / contain;
+            animation: translate 30s infinite linear, rotate 30s infinite linear;
         }
         @keyframes translate {
             0%, 100% { transform: translateX(0); }
             50% { transform: translateX(200px); }
         }
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            10% { transform: rotate(90deg); }
+            20% { transform: rotate(180deg); }
+            30% { transform: rotate(270deg); }
+            40% { transform: rotate(360deg); }
+            50% { transform: rotate(450deg); }
+            60% { transform: rotate(540deg); }
+            70% { transform: rotate(630deg); }
+            80% { transform: rotate(720deg); }
+            90% { transform: rotate(810deg); }
+            100% { transform: rotate(900deg); }
+        }
         #startButton {
             margin-top: 20px;
-            padding: 10px 20px;
+            padding: 10px 40px;
             border: none;
             border-radius: 25px; /* Rond allongé */
             background: rgba(255, 255, 255, 0.5);
@@ -99,6 +112,7 @@
     <video src="Laylow 03.mp4" id="video" class="hidden" loop></video>
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
+            const startButton = document.getElementById('startButton');
             const intro = document.getElementById('intro');
             const video = document.getElementById('video');
             let touchstartX = 0;
@@ -140,6 +154,16 @@
                     });
                 }
             }
+
+            startButton.addEventListener('click', () => {
+                intro.style.display = 'none';
+                video.classList.remove('hidden');
+                video.play().then(() => {
+                    openFullscreen(video); // Mettre en plein écran après le début de la lecture
+                }).catch(error => {
+                    console.error('La lecture a échoué :', error);
+                });
+            });
 
             document.addEventListener('touchstart', (e) => {
                 touchstartX = e.changedTouches[0].screenX;
