@@ -12,7 +12,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(135deg, #00c6fb, #005bea); /* Dégradé de turquoise */
+            background-color: #00FFFF; /* Cyan */
         }
         .hidden {
             display: none;
@@ -29,8 +29,9 @@
             transition: opacity 2s ease; /* Animation de fade-in/fade-out pour l'introduction */
         }
         #Logo_bub {
-            width: 800px;
-            height: 800px;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%; /* Pour rendre le logo rond */
             background: url('Logo_bub.png') no-repeat center center / contain;
             margin-bottom: 20px;
             cursor: pointer; /* Curseur pointeur pour indiquer que le logo est cliquable */
@@ -39,10 +40,10 @@
         }
         @keyframes rotate {
             from {
-                transform: rotate(0deg); /* Rotation initiale */
+                transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); /* Rotation initiale */
             }
             to {
-                transform: rotate(360deg); /* Rotation complète */
+                transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg); /* Rotation complète */
             }
         }
         video {
