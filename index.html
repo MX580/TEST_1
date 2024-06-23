@@ -13,6 +13,7 @@
             justify-content: center;
             align-items: center;
             background-color: #e8d9c5; /* Couleur de fond similaire à celle de la vidéo */
+            transition: background-color 2s ease; /* Animation de transition de couleur de fond */
         }
         .hidden {
             display: none;
@@ -26,14 +27,15 @@
             align-items: center;
             flex-direction: column;
             text-align: center;
+            transition: opacity 2s ease; /* Animation de fade-in/fade-out pour l'introduction */
         }
         #Logo_bub {
             width: 400px;
             height: 400px;
-            background: url('Logo_bub.png') no-repeat center center / contain;
+            background: url('logo.png') no-repeat center center / contain;
             margin-bottom: 20px;
             border-radius: 50%;
-            transition: transform 3s ease; /* Animation de rotation de 3 secondes */
+            transition: transform 3s cubic-bezier(0.25, 0.1, 0.25, 1); /* Animation de rotation */
         }
         #startButton {
             padding: 20px 40px;
@@ -103,13 +105,16 @@
                 logo.style.transition = `transform ${rotationDuration}ms cubic-bezier(0.25, 0.1, 0.25, 1)`;
                 logo.style.transform = `rotateY(${maxRotation}deg)`; // Rotation autour de l'axe Y
                 setTimeout(() => {
-                    intro.style.display = 'none';
-                    video.classList.remove('hidden');
-                    video.play().then(() => {
-                        openFullscreen(video); // Mettre en plein écran après le début de la lecture
-                    }).catch(error => {
-                        console.error('La lecture a échoué :', error);
-                    });
+                    intro.style.opacity = '0'; // Faire disparaître l'introduction
+                    setTimeout(() => {
+                        intro.style.display = 'none';
+                        video.classList.remove('hidden');
+                        video.play().then(() => {
+                            openFullscreen(video); // Mettre en plein écran après le début de la lecture
+                        }).catch(error => {
+                            console.error('La lecture a échoué :', error);
+                        });
+                    }, 1000); // Attendre 1 seconde avant de masquer l'introduction
                 }, rotationDuration);
             }
 
