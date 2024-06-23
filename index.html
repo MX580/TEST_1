@@ -12,7 +12,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #1a1a1a; /* Couleur de fond similaire à celle de la vidéo */
+            background-color: #e8d9c5; /* Couleur de fond similaire à celle de la vidéo */
         }
         .hidden {
             display: none;
@@ -27,17 +27,13 @@
             flex-direction: column;
             text-align: center;
         }
-        @keyframes backgroundFade {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
         #Logo_bub {
             width: 400px;
             height: 400px;
-            background: url('logo.png') no-repeat center center / contain;
+            background: url('Logo_bub.png') no-repeat center center / contain;
             margin-bottom: 20px;
             border-radius: 50%;
+            transition: transform 3s ease; /* Animation de rotation de 3 secondes */
         }
         #startButton {
             padding: 20px 40px;
@@ -76,7 +72,6 @@
             let touchendX = 0;
             let touchstartTime = 0;
             let touchendTime = 0;
-            let rotation = 0;
 
             function openFullscreen(elem) {
                 if (elem.requestFullscreen) {
@@ -103,11 +98,10 @@
             }
 
             function rotateLogo(speed) {
-                const initialRotation = 360 * speed * 10; // Adjust the multiplier to control the rotation amount
-                const duration = speed * 1000; // Convert speed to duration
-                rotation += initialRotation;
-                logo.style.transition = `transform ${duration}ms cubic-bezier(0.25, 0.1, 0.25, 1)`; // Smooth deceleration
-                logo.style.transform = `rotate(${rotation}deg)`;
+                const maxRotation = 360 * speed * 10; // Calculer la rotation maximale en fonction de la vitesse
+                const rotationDuration = Math.min(3000, maxRotation); // Limiter la durée à 3 secondes max
+                logo.style.transition = `transform ${rotationDuration}ms cubic-bezier(0.25, 0.1, 0.25, 1)`;
+                logo.style.transform = `rotateY(${maxRotation}deg)`; // Rotation autour de l'axe Y
                 setTimeout(() => {
                     intro.style.display = 'none';
                     video.classList.remove('hidden');
@@ -116,7 +110,7 @@
                     }).catch(error => {
                         console.error('La lecture a échoué :', error);
                     });
-                }, duration);
+                }, rotationDuration);
             }
 
             document.addEventListener('touchstart', (e) => {
