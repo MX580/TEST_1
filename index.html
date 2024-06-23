@@ -32,10 +32,11 @@
         #Logo_bub {
             width: 600px;
             height: 600px;
-            background: url('Logo_bub.png') no-repeat center center / contain;
+            background: url('logo.png') no-repeat center center / contain;
             margin-bottom: 20px;
             border-radius: 50%;
             transition: transform 10s cubic-bezier(0.25, 0.1, 0.25, 1); /* Animation de rotation */
+            cursor: pointer; /* Curseur pointeur pour indiquer que le logo est cliquable */
         }
         #startButton {
             padding: 20px 40px;
@@ -113,16 +114,11 @@
                 }, 1000); // Attendre 1 seconde avant de masquer l'introduction
             }
 
-            // Commencer la rotation initiale du logo
+            // Commencer la rotation du logo sur clic
             logo.addEventListener('click', () => {
                 logo.style.transition = `transform 10s cubic-bezier(0.25, 0.1, 0.25, 1)`; // Animation de rotation initiale
                 rotationSpeed = 10; // Vitesse initiale de rotation
                 rotateLogo();
-
-                // Déclencher l'augmentation de la vitesse de rotation
-                rotationInterval = setInterval(() => {
-                    rotateLogo();
-                }, 2000); // Augmenter la vitesse toutes les 2 secondes
 
                 // Démarrer la vidéo après 10 secondes (durée de l'animation de rotation initiale)
                 setTimeout(() => {
