@@ -41,16 +41,16 @@
             object-fit: contain;
             cursor: pointer;
         }
-        @keyframes rotation {
+        @keyframes rotationY {
             0% {
-                transform: rotateZ(0deg);
+                transform: rotateY(0deg);
             }
             100% {
-                transform: rotateZ(360deg);
+                transform: rotateY(180deg);
             }
         }
-        .rotate {
-            animation: rotation 2s linear forwards;
+        .rotateY {
+            animation: rotationY 2s linear forwards;
         }
     </style>
 </head>
@@ -95,7 +95,7 @@
 
             // Quand le logo est cliqué, cacher l'introduction et lancer la vidéo en plein écran
             logo.addEventListener('click', () => {
-                logo.classList.add('rotate'); // Ajouter la classe de rotation
+                logo.classList.add('rotateY'); // Ajouter la classe de rotationY
                 setTimeout(() => {
                     intro.style.display = 'none';
                     video.classList.remove('hidden');
