@@ -35,22 +35,20 @@
             background: url('Logo_bub.png') no-repeat center center / contain;
             margin-bottom: 20px;
             cursor: pointer; /* Curseur pointeur pour indiquer que le logo est cliquable */
-            animation: rotate 10s linear infinite; /* Animation de rotation continue */
-            transform-origin: center; /* Centre de rotation */
-        }
-        @keyframes rotate {
-            from {
-                transform: rotateZ(0deg); /* Rotation initiale sur l'axe Z */
-            }
-            to {
-                transform: rotateZ(360deg); /* Rotation complète sur l'axe Z */
-            }
         }
         video {
             width: 100vw;
             height: 100vh;
             object-fit: contain;
             cursor: pointer;
+        }
+        @keyframes rotation {
+            0% {
+                transform: rotateY(0deg);
+            }
+            100% {
+                transform: rotateY(360deg);
+            }
         }
     </style>
 </head>
@@ -78,20 +76,38 @@
                 }
             }
 
+            function increaseVolumeOverTime(video, duration) {
+                const startVolume = 0.1; // Volume de départ (10%)
+                const endVolume = initialVolume; // Volume final (30%)
+                const volumeIncrement = (endVolume - startVolume) / (duration * 1000 / 50);
+                video.volume = startVolume;
+
+                const interval = setInterval(() => {
+                    if (video.volume < endVolume) {
+                        video.volume = Math.min(endVolume, video.volume + volumeIncrement);
+                    } else {
+                        clearInterval(interval);
+                    }
+                }, 50);
+            }
+
             // Quand le logo est cliqué, cacher l'introduction et lancer la vidéo en plein écran
             logo.addEventListener('click', () => {
                 intro.style.opacity = '0'; // Faire disparaître l'introduction
                 setTimeout(() => {
                     intro.style.display = 'none';
-                    video.classList.remove('hidden');
-                    openFullscreen(video); // Mettre en plein écran
-                    video.volume = initialVolume; // Définir le volume initial
-                    video.play().then(() => {
-                        // Démarrer la vidéo avec volume initial
-                    }).catch(error => {
-                        console.error('La lecture a échoué :', error);
-                    });
-                }, 2000); // Attendre 2 secondes avant de démarrer la vidéo
+                    logo.style.animation = 'rotation 2s linear forwards'; // Animer la rotation
+                    setTimeout(() => {
+                        logo.style.display = 'none';
+                        video.classList.remove('hidden');
+                        openFullscreen(video); // Mettre en plein écran
+                        video.play().then(() => {
+                            increaseVolumeOverTime(video, 5); // Augmenter progressivement le volume
+                        }).catch(error => {
+                            console.error('La lecture a échoué :', error);
+                        });
+                    }, 2000); // Attendre 2 secondes avant de démarrer la vidéo
+                }, 2000); // Attendre 2 secondes avant de cacher l'introduction
             });
 
             // Fermer la fenêtre lorsque la vidéo se termine
