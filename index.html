@@ -31,7 +31,6 @@
         #Logo_bub {
             width: 600px;
             height: 600px;
-            border-radius: 50%; /* Pour rendre le logo rond */
             background: url('Logo_bub.png') no-repeat center center / contain;
             margin-bottom: 20px;
             cursor: pointer; /* Curseur pointeur pour indiquer que le logo est cliquable */
@@ -44,11 +43,14 @@
         }
         @keyframes rotation {
             0% {
-                transform: rotateY(0deg);
+                transform: rotateZ(0deg);
             }
             100% {
-                transform: rotateY(360deg);
+                transform: rotateZ(360deg);
             }
+        }
+        .rotate {
+            animation: rotation 2s linear forwards;
         }
     </style>
 </head>
@@ -93,21 +95,17 @@
 
             // Quand le logo est cliqué, cacher l'introduction et lancer la vidéo en plein écran
             logo.addEventListener('click', () => {
-                intro.style.opacity = '0'; // Faire disparaître l'introduction
+                logo.classList.add('rotate'); // Ajouter la classe de rotation
                 setTimeout(() => {
                     intro.style.display = 'none';
-                    logo.style.animation = 'rotation 2s linear forwards'; // Animer la rotation
-                    setTimeout(() => {
-                        logo.style.display = 'none';
-                        video.classList.remove('hidden');
-                        openFullscreen(video); // Mettre en plein écran
-                        video.play().then(() => {
-                            increaseVolumeOverTime(video, 5); // Augmenter progressivement le volume
-                        }).catch(error => {
-                            console.error('La lecture a échoué :', error);
-                        });
-                    }, 2000); // Attendre 2 secondes avant de démarrer la vidéo
-                }, 2000); // Attendre 2 secondes avant de cacher l'introduction
+                    video.classList.remove('hidden');
+                    openFullscreen(video); // Mettre en plein écran
+                    video.play().then(() => {
+                        increaseVolumeOverTime(video, 5); // Augmenter progressivement le volume
+                    }).catch(error => {
+                        console.error('La lecture a échoué :', error);
+                    });
+                }, 2000); // Attendre 2 secondes avant de cacher l'introduction et démarrer la vidéo
             });
 
             // Fermer la fenêtre lorsque la vidéo se termine
